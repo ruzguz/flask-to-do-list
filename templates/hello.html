@@ -5,12 +5,16 @@
     </head>
 
     <body>
-        <h1>Hello world from flask, your IP is {{ user_ip }}</h1>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Odio eaque perspiciatis laborum est dolorum. Aperiam inventore, 
-            iste ipsam voluptates nostrum tempora dolor temporibus obcaecati 
-            dolorem perspiciatis, ducimus id, eligendi quas?
-        </p>
+        {% if user_ip %}
+            <h1>Hello world from flask, your IP is {{ user_ip }}</h1>
+            
+            <ul>
+                {% for todo in todos %}
+                    <li>{{ todo }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <a href="{{ url_for('index') }}">Go to homepage</a>
+        {% endif %}
     </body>
 </html>

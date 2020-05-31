@@ -2,6 +2,8 @@ from flask import Flask, request, make_response, redirect, render_template
 
 app = Flask(__name__)
 
+todos = [ 'TODO 1', 'TODO 2', 'TODO 3' ]
+
 @app.route('/')
 def index():
     # Getting user IP and save it in a cookie
@@ -18,4 +20,9 @@ def hello():
     # Getting user IP
     user_ip = request.cookies.get('user_ip')
     
-    return render_template('hello.html', user_ip=user_ip)
+    context = {
+        'user_ip': user_ip,
+        'todos': todos,
+    }
+    
+    return render_template('hello.html', **context)
