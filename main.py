@@ -29,10 +29,10 @@ def hello():
 
 ## Error handlers
 
-@app.errorhandler(404):
+@app.errorhandler(404)
 def not_found(error):
     return render_template('errors/404.html', error=error)
 
-@app.errorhandler(500):
+@app.errorhandler(500)
 def server_error(error):
     return render_template('errors/500.html', error=error)
