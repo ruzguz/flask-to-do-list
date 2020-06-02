@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% import 'macros.html' as macros %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %}
     {{ super() }}
@@ -7,6 +8,12 @@
 {% endblock %}
 
 {% block content %}
+    {% if username %}
+        <h1>Welcome {{ username | upper }}</h1>
+    {% endif %}
+    <div class="container">
+        {{ wtf.quick_form(login_form) }}        
+    </div>
     {% if user_ip %}
         <h1>Hello world from flask, your IP is {{ user_ip }}</h1>
                 
