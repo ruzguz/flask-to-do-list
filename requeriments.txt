@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask-bootstrap
 flask-wtf
+flask-testing
