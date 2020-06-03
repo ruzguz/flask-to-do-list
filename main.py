@@ -4,6 +4,7 @@ from app.forms import LoginForm
 import unittest
 from app import create_app
 from app.firestore_service import get_users, get_todos
+from flask_login import login_required
 
 
 ## app configuration
@@ -28,6 +29,7 @@ def index():
 
 
 @app.route('/hello')
+@login_required
 def hello():
     # Getting user info
     user_ip = session.get('user_ip')
@@ -38,10 +40,6 @@ def hello():
         'todos': get_todos(user_id=username),
         'username': username
     }
-
-    users = get_users()
-    for user in users:
-        print('{} : {}'.format(user.id, user.to_dict()['password']))
 
     return render_template('hello.html', **context)
 
