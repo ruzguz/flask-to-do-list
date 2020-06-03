@@ -28,15 +28,10 @@ class MainTest(TestCase):
         response = self.client.get(url_for('hello'))
         self.assert200(response)
 
-    # Test user login post
-    def test_auth_login_post(self):
-        fake_form = {
-            'username': 'Fake user',
-            'password': '1234',
-        }
-
-        response = self.client.post(url_for('hello'), data=fake_form)
-        self.assertRedirects(response, url_for('index'))
+    # Test user hello post
+    def test_hello_posr(self):
+        response = self.client.post(url_for('hello'))
+        self.assert405(response, url_for('index'))
     
     # Test auth blueprint exist
     def test_auth_blueprint_exists(self):
@@ -51,3 +46,13 @@ class MainTest(TestCase):
     def test_auth_login_template(self):
         self.client.get(url_for('auth.login'))
         self.assertTemplateUsed('login.html')
+
+    # Test auth login post
+    def test_auth_login_post(self):
+        fake_form = {
+            'username': 'fake user',
+            'password': '1234',
+        }
+
+        response = self.client.post(url_for('auth.login'), data=fake_form)
+        self.assertRedirects(response, url_for('index'))
