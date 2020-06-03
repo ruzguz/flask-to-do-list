@@ -1,16 +1,12 @@
-from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
+from flask import request, make_response, redirect, render_template, session, url_for, flash
 from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from app.forms import LoginForm
 import unittest
+from app import create_app
 
 
 ## app configuration
-app = Flask(__name__)
-bootstrap = Bootstrap(app)
-
-app.config['SECRET_KEY'] = 'DONT TELL THE SECRET'
+app = create_app()
 
 ## Commands
 @app.cli.command()
@@ -21,13 +17,6 @@ def test():
 
 ## Vars
 todos = [ 'TODO 1', 'TODO 2', 'TODO 3' ]
-
-
-## Forms 
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Login')
 
 ## Routes
 @app.route('/')
