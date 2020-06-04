@@ -4,7 +4,7 @@ from app.forms import LoginForm
 import unittest
 from app import create_app
 from app.firestore_service import get_users, get_todos
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 
 ## app configuration
@@ -33,7 +33,7 @@ def index():
 def hello():
     # Getting user info
     user_ip = session.get('user_ip')
-    username = session.get('username')
+    username = current_user.username
 
     context = {
         'user_ip': user_ip,

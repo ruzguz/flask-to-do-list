@@ -1,5 +1,10 @@
 from flask import render_template, session, redirect, flash, url_for
+from flask_login import login_user
+
 from app.forms import LoginForm
+from app.firestore_service import get_user
+from app.models import UserModel, UserData
+
 from . import auth
 
 
@@ -12,9 +17,29 @@ def login():
 
     if login_form.validate_on_submit():
         username = login_form.username.data
-        session['username'] = username
+        password = login_form.password.data
 
-        flash('Username registered successfully')
+        # Get user from database
+        user_doc = get_user(username)
+
+        if user_doc.to_dict() is not None:
+            # Getting password from DB
+            password_from_db = user_doc.to_dict()['password']
+
+            # Check is password is correct
+            if password == password_from_db:
+                user_data = UserData(username, password)
+                user = UserModel(user_data)
+
+                login_user(user)
+
+                flash('Welcome back')
+
+                redirect(url_for('hello'))
+            else: # wrong password
+                flash('Wrong password')
+        else: # User not found
+            flash('User doesn\'t exists')
 
         return redirect(url_for('index'))
 
