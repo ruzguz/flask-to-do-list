@@ -53,3 +53,16 @@ def logout():
     flash('Come back soon!!!')
 
     return redirect(url_for('auth.login'))
+
+@auth.route('signup', methods=['GET', 'POST'])
+def signup():
+    signup_form = LoginForm()
+    context = {
+        'signup_form': signup_form,
+    }
+
+    if signup_form.validate_on_submit():
+        pass
+
+    return render_template('signup.html', **context)
+
