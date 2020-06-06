@@ -2,8 +2,9 @@ from flask import render_template, session, redirect, flash, url_for
 from flask_login import login_user, login_required, logout_user
 
 from app.forms import LoginForm
-from app.firestore_service import get_user
+from app.firestore_service import get_user, create_user
 from app.models import UserModel, UserData
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import auth
 
@@ -27,7 +28,7 @@ def login():
             password_from_db = user_doc.to_dict()['password']
 
             # Check is password is correct
-            if password == password_from_db:
+            if check_password_hash(password_from_db, password):
                 user_data = UserData(username, password)
                 user = UserModel(user_data)
 
@@ -62,7 +63,28 @@ def signup():
     }
 
     if signup_form.validate_on_submit():
-        pass
+        username = signup_form.username.data
+        password = signup_form.password.data
+
+        user_doc = get_user(username)
+
+        if user_doc.to_dict() is None:
+            password_hash = generate_password_hash(password)
+
+            user_data  = UserData(username, password_hash)
+            
+            # create user in the data base
+            create_user(user_data)
+
+            # login user in the app
+            user = UserModel(user_data)
+            login_user(user)
+
+            flash('Welcome')
+
+            return redirect(url_for('hello'))
+        else: 
+            flash('This user already exists')
 
     return render_template('signup.html', **context)
 
